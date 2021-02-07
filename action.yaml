@@ -1,0 +1,28 @@
+name: List Open PRs
+description: List all open PRs in any repo, by default in the repo the action is in
+author: chrisaddy <chris.william.addy@gmail.com>
+inputs:
+  GITHUB_TOKEN:
+    description: Your GitHub token for authentication
+    required: true
+  repository:
+    description: 'github repository'
+    required: true
+    default: '${{ github.repository }}'
+  state:
+    description: 'filter by state of the pull request'
+    required: true
+    default: 'accepted'
+outputs:
+  pulls:
+    description: 'number of pull requests'
+runs:
+  using: docker
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.GITHUB_TOKEN }}
+    - ${{ inputs.repository }}
+    - ${{ inputs.state }}
+branding:
+  icon: flag
+  color: gray-dark
