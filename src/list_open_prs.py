@@ -1,16 +1,28 @@
 from github import Github
-import sys
+import datetime
+import os
 
-access_token = sys.argv[1]
-repo = sys.argv[2]
+ACCESS_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_NAME = os.getenv("REPO_NAME")
 
-owner, repository = repo.split("/")
+owner, repository = REPO_NAME.split("/")
 
-gh = Github(access_token)
+gh = Github(ACCESS_TOKEN)
 
+open_prs = []
 rep = gh.get_user(owner).get_repo(repository)
 pulls = rep.get_pulls(state="open")
 for pull in pulls:
-    print(pull)
-    print(dir(pull))
-    print(pull.mergeable_state)
+    open_prs.append(
+        {
+            "title": pull.title,
+            "state": pull.state,
+            "created_at": pull.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "updated_at": pull.updated_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "mergeable": pull.mergeable,
+            "mergeable_state": pull.mergeable_state,
+            "merged": pull.merged,
+        }
+    )
+
+print(open_prs)
