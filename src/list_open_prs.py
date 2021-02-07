@@ -25,4 +25,4 @@ for pull in pulls:
         }
     )
 
-print(open_prs)
+print(f"::set-output name=pulls::{open_prs}")
